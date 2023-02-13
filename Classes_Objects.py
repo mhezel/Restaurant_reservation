@@ -4,6 +4,7 @@ class Person:
     kids = 300
     adult = 500
     record_count = 0
+    countrow = 0
 
     def __init__(self, name, date, _time, x , y):
         self.name = name
@@ -14,10 +15,28 @@ class Person:
 
     # superclass's version of display()
     def display(self):
-        return "NAME: " + self.name + "\t" + "Date: " + self.date + "\t" + "Time: " + self._time + "\t" + "No of Adults: " + str(self.x) + "\t" + "No of Children: " + str(self.y) + "\t" "Subtotal: " + str(self.getTotalAmt()) + "\n"
+        return "NAME: " + self.name + "\t" + "Date: " + self.date + "\t" + "Time: " + self._time + "\t" + "No of Adults: " + str(self.x) + "\t\t" + "No of Children: " + str(self.y) + "\t" "Subtotal: " + str(self.getTotalAmt()) + "\n"
 
     def getTotalAmt(self):
         return ((int(self.x) * int(Person.adult))+(int(self.x) * int(Person.kids)))
+
+
+    def setData(self):
+        Person.res_list.append(self.name)
+        Person.res_list.append(self.date)
+        Person.res_list.append(self._time)
+        Person.res_list.append(self.x)
+        Person.res_list.append(self.y)
+
+    def viewData(self):
+        print("NAME: " + "\t\t" + "Date: " + "\t\t\t" + "Time: " + "\t\t" + "Adults: " + "Children: ")
+        for row in Person.res_list:
+                print(row, end="\t\t")
+                Person.countrow += 1
+
+                if Person.countrow >= 5:
+                    print("\n")
+                    Person.countrow = 0
 
 class Customer(Person):
 
@@ -57,9 +76,27 @@ def menu():
     if reserve.upper() == 'A':
         p1 = Customer.view_reservation()
 
+        while True:
+            try:
+                q1 = input("Would you like to try and reserve again? [Y/N]")
+
+                if q1.upper() == 'Y':
+                    menu()
+                    break
+                elif q1.upper() == 'N':
+                    print("Thank you, Goodbye . . . .")
+                    break
+                else:
+                    print("Invalid Input Try Again")
+
+            except ValueError:
+                print("Invalid input. Please try again...")
+
     if reserve.upper() == 'B':
-        p1 = Person(input("Name: "), input("Date: "), input("Time: "), input("Number of Adult: "),input("Number of Children: "))
-        print(p1.display())
+        p1 = Person(input("Name: "), input("Date-format(m-d-yyyy): "), input("Time-format(h:m): "), input("Number of Adult: "),input("Number of Children: "))
+        p1.setData()
+        p1.viewData()
+        print("\n")
 
         while True:
             try:
@@ -67,6 +104,7 @@ def menu():
                 break
             except ValueError:
                 print("Invalid input. Please try again...")
+
         if q1.upper() == "Y":  # run add
             # saveToTextFile()
             # reserve1 = Restaurant()
@@ -83,12 +121,16 @@ def menu():
             print('back to options...')
 
         while True:
-            _next = input("Would you like to view your reservation? Please type Y/N: ")
+            _next = input("Would you like to view/make another reservation? Please type Y/N: ")
             if _next.upper() == 'Y':
                 menu()
                 break
             elif _next.upper() == 'N':
                 print("Thank you, Goodbye . . . .")
+                break
             else:
                 print("Invalid Input Try Again")
+
+    if reserve.upper() == 'E':
+        exit()
 menu()
