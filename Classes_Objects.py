@@ -22,6 +22,7 @@ class Person:
 
 
     def setData(self):
+
         Person.res_list.append(self.name)
         Person.res_list.append(self.date)
         Person.res_list.append(self._time)
@@ -62,6 +63,49 @@ class Customer(Person):
 
     def display(self):
         print(super(Person,self).display())
+
+    def deleteData(op_delete):
+        lines = []
+        try:
+            # Open the file in read mode and read its contents
+            with open('file.txt', 'r') as file:
+                print("\n")
+                lines = file.readlines()
+
+            # Remove the third line (index 2)
+            del lines[op_delete - 1]
+
+            # Open the file in write mode and write the updated contents back to the file
+            with open('file.txt', 'w') as file:
+                file.writelines(lines)
+
+            with open('file.txt', 'r') as file:
+                lines = file.readlines()
+                for line in lines:
+                    print(line)
+
+            while True:
+                try:
+                    x = input("\npress [D] to delete another reservation / [M] to go back to the menu: ").upper()
+                    if x == 'D':
+                        try:
+                            with open("file.txt","r") as file:
+                                lines = file.readlines()
+
+                            for line in lines:
+                                print(line)
+
+                            op_delete = int(input("Select record to delete: "))
+                            p1 = Customer.deleteData(op_delete)
+
+                        except:
+                            print("No record Found to be deleted")
+                    elif x == 'M':
+                        menu()
+                except:
+                        print("\nFollow instructions given")
+        except:
+            print("File not found")
 
 def menu():
     print("################### RESTAURANT RESERVATION PROGRAM #######################")
@@ -113,8 +157,7 @@ def menu():
             except:
                 print("File not found")
             else:
-                fl.write(
-                    "NAME: " + p1.name + "\t" + "Date: " + p1.date + "\t" + "Time: " + p1._time + "\t" + "No of Adults: " + str(p1.x) + "\t" + "No of Children: " + str(p1.y) + "\t" "Subtotal: " + str(p1.getTotalAmt()) + "\n")
+                fl.write("NAME: " + p1.name + "\t" + "Date: " + p1.date + "\t" + "Time: " + p1._time + "\t" + "No of Adults: " + str(p1.x) + "\t" + "No of Children: " + str(p1.y) + "\t" "Subtotal: " + str(p1.getTotalAmt()) + "\n")
             finally:
                 fl.close()
         elif q1.upper() == "N":  # reload to options
@@ -124,13 +167,37 @@ def menu():
             _next = input("Would you like to view/make another reservation? Please type Y/N: ")
             if _next.upper() == 'Y':
                 menu()
-                break
             elif _next.upper() == 'N':
                 print("Thank you, Goodbye . . . .")
                 break
             else:
                 print("Invalid Input Try Again")
 
+    if reserve.upper() == 'C':
+        try:
+            fl = open("file.txt", "r")
+        except:
+            print("File not found")
+        else:
+            Person.res_list = fl.readlines()
+            count_record = 0
+            for row in Person.res_list:
+                count_record += 1
+                #print(row)
+            if count_record >= 1:
+                #print(str(count_record) + ' Record(s) Found.')
+                with open("file.txt","r") as file:
+                    lines = file.readlines()
+                for line in lines:
+                    print(line)
+                op_delete = int(input("Select record to delete: "))
+                p1 = Customer.deleteData(op_delete)
+            else:
+                print('No record of Reservations found')
+                print("\n")
+                menu()
+
     if reserve.upper() == 'E':
+        print("Thank you and come again!")
         exit()
 menu()
