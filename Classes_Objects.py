@@ -34,7 +34,6 @@ class Person:
         for row in Person.res_list:
                 print(row, end="\t\t")
                 Person.countrow += 1
-
                 if Person.countrow >= 5:
                     print("\n")
                     Person.countrow = 0
@@ -53,6 +52,7 @@ class Customer(Person):
             for row in Person.res_list:
                 count_record += 1
                 print(row)
+            print("\n########################NOTHING FOLLOWS#################################")
             if count_record >= 1:
                 print(str(count_record) + ' Record(s) Found.')
             else:
@@ -60,6 +60,12 @@ class Customer(Person):
             fl.close()
             # print("File close")
             # ask save to textfile
+
+    def viewtotal():
+        #Total number of Adults: 6
+        #Total number of Kids: 6
+        #Grand Total: PHP 4800.00
+        pass
 
     def display(self):
         print(super(Person,self).display())
@@ -103,7 +109,7 @@ class Customer(Person):
                     elif x == 'M':
                         menu()
                 except:
-                        print("\nFollow instructions given")
+                        exit()
         except:
             print("File not found")
 
@@ -137,7 +143,11 @@ def menu():
                 print("Invalid input. Please try again...")
 
     if reserve.upper() == 'B':
-        p1 = Person(input("Name: "), input("Date-format(m-d-yyyy): "), input("Time-format(h:m): "), input("Number of Adult: "),input("Number of Children: "))
+        p1 = Person(input("Name: "),
+                    input("Date-format(m-d-yyyy): "),
+                    input("Time-format(h:m): "),
+                    input("Number of Adult: "),
+                    input("Number of Children: "))
         p1.setData()
         p1.viewData()
         print("\n")
@@ -197,7 +207,28 @@ def menu():
                 print("\n")
                 menu()
 
+    if reserve.upper() == 'D':
+        p1 = Customer.view_reservation()
+        #p1 = Customer.view_total()
+
+        while True:
+            try:
+                q1 = input("Would you like to try and reserve again? [Y/N]")
+
+                if q1.upper() == 'Y':
+                    menu()
+                    break
+                elif q1.upper() == 'N':
+                    print("Thank you, Goodbye . . . .")
+                    break
+                else:
+                    print("Invalid Input Try Again")
+
+            except ValueError:
+                print("Invalid input. Please try again...")
+
     if reserve.upper() == 'E':
         print("Thank you and come again!")
         exit()
+
 menu()
